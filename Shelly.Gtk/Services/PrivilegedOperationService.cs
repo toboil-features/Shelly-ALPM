@@ -261,7 +261,7 @@ public class PrivilegedOperationService : IPrivilegedOperationService
             if (_fingerprintAuthDetector.Detect().SudoUsesFingerprint)
             {
                 hint = " Tip: a fingerprint prompt on sudo (pam_fprintd) may be interfering with privileged output. " +
-                       "See issue #728: https://github.com/Seafoam-Labs/Shelly-ALPM/issues/728";
+                       "Work for enabling full biometric support is on going please disable for the time being.";
             }
         }
         catch
