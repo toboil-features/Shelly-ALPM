@@ -391,7 +391,7 @@ public class UnprivilegedOperationService(
         var arguments = string.Join(" ", args);
         var fullCommand = $"{_cliPath} {arguments}";
 
-        Console.WriteLine($"Executing privileged command: {fullCommand}");
+        Console.WriteLine($"Executing unprivileged command: {fullCommand}");
 
         var process = new Process
         {
