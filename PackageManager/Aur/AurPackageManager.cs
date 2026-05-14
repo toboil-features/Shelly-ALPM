@@ -1699,8 +1699,6 @@ public sealed class AurPackageManager(string? configPath = null)
             // Populate the store with current remote SHAs so next check can compare
             foreach (var entry in entries)
             {
-                if (string.IsNullOrEmpty(entry.Branch))
-                    continue;
                 var sha = await GetRemoteCommitSha(entry.Url, entry.Branch);
                 if (sha != null)
                     entry.CommitSha = sha;
@@ -1715,8 +1713,6 @@ public sealed class AurPackageManager(string? configPath = null)
         foreach (var entry in storedEntries)
         {
             if (string.IsNullOrEmpty(entry.CommitSha))
-                continue;
-            if (string.IsNullOrEmpty(entry.Branch))
                 continue;
 
             var remoteSha = await GetRemoteCommitSha(entry.Url, entry.Branch);
@@ -1754,9 +1750,6 @@ public sealed class AurPackageManager(string? configPath = null)
     /// </summary>
     private static async Task<string?> GetRemoteCommitSha(string url, string branch, int timeoutSeconds = 15)
     {
-        if (string.IsNullOrEmpty(branch))
-            return null;
-
         using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSeconds));
         try
         {
@@ -1819,8 +1812,6 @@ public sealed class AurPackageManager(string? configPath = null)
 
             foreach (var entry in entries)
             {
-                if (string.IsNullOrEmpty(entry.Branch))
-                    continue;
                 var sha = await GetRemoteCommitSha(entry.Url, entry.Branch);
                 if (sha != null)
                     entry.CommitSha = sha;
