@@ -25,7 +25,8 @@ public static class MemPackFrame
         {
             
             var bytes = Convert.FromBase64String(payload.ToString());
-            Console.Error.WriteLine($"[MemPackFrame] first16={Convert.ToHexString(bytes.AsSpan(0, Math.Min(16, bytes.Length)))}");
+            // Commented out because it's too verbose' 
+            //Console.Error.WriteLine($"[MemPackFrame] first16={Convert.ToHexString(bytes.AsSpan(0, Math.Min(16, bytes.Length)))}");
             value = MemoryPackSerializer.Deserialize<T>(bytes);
             return value is not null;
         }
