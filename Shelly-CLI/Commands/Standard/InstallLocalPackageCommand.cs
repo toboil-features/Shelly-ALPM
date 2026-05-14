@@ -130,9 +130,17 @@ public class InstallLocalPackageCommand : AsyncCommand<InstallLocalPackageSettin
 
     private static async Task<int> HandleConsoleBinaryInstall(InstallLocalPackageSettings settings)
     {
-        return await LocalManager.InstallBinariesPackage(
+        AnsiConsole.MarkupLine($"[yellow]Installing local binary package: {settings.PackageLocation}[/]");
+
+        var result = await LocalManager.InstallBinariesPackage(
             Path.GetFullPath(settings.PackageLocation),
             uiMode: false);
+
+        AnsiConsole.MarkupLine(result == 0
+            ? "[green]Installation complete![/]"
+            : "[red]Installation failed.[/]");
+
+        return result;
     }
 
     private static async Task<int> HandleUiModeBinaryInstall(InstallLocalPackageSettings settings)

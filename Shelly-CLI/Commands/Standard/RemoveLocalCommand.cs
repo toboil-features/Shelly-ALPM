@@ -32,8 +32,6 @@ public class RemoveLocalCommand : AsyncCommand<PackageSettings>
             return 0;
         }
 
-        AnsiConsole.MarkupLine("[yellow]Removing packages...[/]");
-
         var result = await LocalManager.RemoveBinaryPackages(packageList, uiMode: false);
         if (!result)
         {

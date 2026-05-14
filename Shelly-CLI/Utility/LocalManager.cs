@@ -9,7 +9,7 @@ using ZstdSharp;
 
 namespace Shelly_CLI.Utility;
 
-// TODO: Move to PackageManager
+// TODO: Move to PackageManager #771
 public static partial class LocalManager
 {
     public const string InstallDir = "/opt/shelly";
@@ -84,23 +84,11 @@ public static partial class LocalManager
 
                             break;
                         }
-                        case TarEntryType.SymbolicLink:
-                        {
-                            Directory.CreateDirectory(Path.GetDirectoryName(destPath)!);
-                            if (File.Exists(destPath))
-                            {
-                                File.Delete(destPath);
-                            }
-
-                            File.CreateSymbolicLink(destPath, entry.LinkName);
-                            await WriteInfoAsync($"Created symbolic link: {destPath} -> {entry.LinkName}", uiMode);
-                            break;
-                        }
                     }
                 }
             }
 
-            await WriteSuccessAsync($"Extracted to {installDir}", uiMode);
+            await WriteInfoAsync($"Extracted to {installDir}", uiMode);
 
             foreach (var binaryName in installedBinaries)
             {
@@ -115,9 +103,8 @@ public static partial class LocalManager
                 if (foundIcons.Count > 0)
                 {
                     var icon = foundIcons.FirstOrDefault();
-                    await WriteInfoAsync($"Found icon for {binaryName}: {icon.Key}", uiMode);
-                    var installedIconName = InstallIcon(icon.Value, binaryName, uiMode);
-                    if (installedIconName != null)
+                    var installedIconName = await InstallIcon(icon.Value, binaryName, uiMode);
+                    if (string.IsNullOrWhiteSpace(installedIconName))
                     {
                         iconName = installedIconName;
                     }
@@ -142,10 +129,6 @@ public static partial class LocalManager
             if (installedBinaries.Count == 0)
             {
                 await WriteWarningAsync("No executable ELF binaries were found in the archive.", uiMode);
-            }
-            else
-            {
-                await WriteSuccessAsync("Desktop entries created.", uiMode);
             }
 
             return 0;
@@ -390,7 +373,7 @@ public static partial class LocalManager
             SetFilePermissions(desktopFilePath, "644", uiMode);
             UpdateDesktopDatabase(DesktopDir, uiMode);
 
-            WriteSuccess($"Desktop entry created: {desktopFilePath}", uiMode);
+            WriteInfo($"Desktop entry created: {desktopFilePath}", uiMode);
         }
         catch (Exception ex)
         {
@@ -448,7 +431,7 @@ public static partial class LocalManager
         }
     }
 
-    private static string? InstallIcon(string iconPath, string appName, bool uiMode)
+    private static async Task<string> InstallIcon(string iconPath, string appName, bool uiMode)
     {
         try
         {
@@ -472,6 +455,7 @@ public static partial class LocalManager
             var destPath = Path.Combine(destDir, iconName);
 
             File.Copy(iconPath, destPath, true);
+            await WriteInfoAsync($"Installed icon: {iconPath}", uiMode);
 
             try
             {
@@ -484,19 +468,22 @@ public static partial class LocalManager
                     UseShellExecute = false,
                     CreateNoWindow = true
                 });
-                process?.WaitForExit();
+                if (process == null)
+                    throw new InvalidOperationException("Unable to start gtk-update-icon-cache process.");
+
+                await process.WaitForExitAsync();
             }
             catch (Exception ex)
             {
-                WriteWarning($"Warning: Failed to update icon cache: {ex.Message}", uiMode);
+                await WriteWarningAsync($"Warning: Failed to update icon cache: {ex.Message}", uiMode);
             }
 
             return appName.ToLower();
         }
         catch (Exception ex)
         {
-            WriteWarning($"Warning: Could not install icon: {ex.Message}", uiMode);
-            return null;
+            await WriteWarningAsync($"Warning: Could not install icon: {ex.Message}", uiMode);
+            return string.Empty;
         }
     }
 
@@ -555,7 +542,7 @@ public static partial class LocalManager
         AnsiConsole.MarkupLine($"[yellow]{message.EscapeMarkup()}[/]");
     }
 
-    private static void WriteSuccess(string message, bool uiMode)
+    private static void WriteInfo(string message, bool uiMode)
     {
         if (uiMode)
         {
@@ -563,6 +550,6 @@ public static partial class LocalManager
             return;
         }
 
-        AnsiConsole.MarkupLine($"[green]{message.EscapeMarkup()}[/]");
+        AnsiConsole.MarkupLine($"[cyan]{message.EscapeMarkup()}[/]");
     }
 }
