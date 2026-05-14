@@ -4,8 +4,7 @@ using PackageManager.Alpm;
 using PackageManager.Alpm.Pacfile;
 using PackageManager.Aur.Models;
 using PackageManager.Flatpak;
-using Shelly_CLI.Commands.Aur;
-using Shelly_CLI.Commands.Standard;
+using PackageManager.Local;
 using Shelly_CLI.Commands.Standard.Models;
 using Shelly_CLI.Configuration;
 

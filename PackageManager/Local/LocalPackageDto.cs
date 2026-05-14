@@ -1,6 +1,6 @@
 using MemoryPack;
 
-namespace Shelly.Gtk.UiModels.PackageManagerObjects;
+namespace PackageManager.Local;
 
 [MemoryPackable]
 public partial record LocalPackageDto(

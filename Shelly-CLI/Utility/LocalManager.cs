@@ -3,7 +3,7 @@ using System.Formats.Tar;
 using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
-using Shelly_CLI.Commands.Standard;
+using PackageManager.Local;
 using Spectre.Console;
 using ZstdSharp;
 

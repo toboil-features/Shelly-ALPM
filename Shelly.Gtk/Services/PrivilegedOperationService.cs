@@ -37,7 +37,7 @@ public class PrivilegedOperationService : IPrivilegedOperationService
         _fingerprintAuthState = fingerprintAuthState;
         _cliPath = CliPathResolver.FindCliPath();
     }
-    
+
     private string[] AppendNoConfirmIfNeeded(params string[] args)
     {
         var config = _configService.LoadConfig();
@@ -286,21 +286,8 @@ public class PrivilegedOperationService : IPrivilegedOperationService
 
         try
         {
-            var lines = result.Output.Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var line in lines)
-            {
-                var trimmedLine = StripBom(line.Trim());
-                if (!trimmedLine.StartsWith('[') || !trimmedLine.EndsWith(']')) continue;
-
-                var packages = System.Text.Json.JsonSerializer
-                    .Deserialize(trimmedLine, ShellyGtkJsonContext.Default.ListLocalPackageDto);
-                return packages ?? [];
-            }
-
-            // If no JSON array found, try parsing the whole output
-            var allPackages = System.Text.Json.JsonSerializer
-                .Deserialize(StripBom(result.Output.Trim()), ShellyGtkJsonContext.Default.ListLocalPackageDto);
-            return allPackages ?? [];
+            MemPackFrame.TryDecode<List<LocalPackageDto>>(result.Output, out var framed);
+            return framed ?? throw new InvalidOperationException();
         }
         catch (Exception ex)
         {
