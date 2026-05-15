@@ -1,12 +1,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: shelly-ui 2.2.4.1\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: csnyder@seafoamlabs.org\n"
 "POT-Creation-Date: 2026-05-14 18:41-0400\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-05-15 08:45+EST\n"
+"Last-Translator: csnyder@seafoamlabs.org\n"
+"Language-Team: csnyder@seafoamlabs.org\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -576,7 +576,6 @@ msgstr ""
 
 msgid "Installed local package"
 msgstr ""
-
 
 msgid "Package Files ({0})"
 msgstr ""
@@ -1243,4 +1242,10 @@ msgid "Description"
 msgstr ""
 
 msgid "Last Updated"
+msgstr ""
+
+msgid "Remove Optional Deps"
+msgstr ""
+
+msgid "Also remove orphaned optional dependencies installed with these packages."
 msgstr ""
