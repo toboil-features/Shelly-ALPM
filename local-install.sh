@@ -132,7 +132,9 @@ Exec=/usr/bin/shelly-ui
 Icon=shelly
 Type=Application
 Categories=System;Utility;
+Keywords=program;software;store;repository;package;add;install;uninstall;remove;update;apps;applications;flatpak;pacman;aur;appimage;
 Terminal=false
+Actions=FlatpakInstall;FlatpakUpdate;FlatpakRemove;
 EOF
 
 echo "Creating notifications entry"
